@@ -1,0 +1,51 @@
+The plugin provides a number of useful utilities.
+
+h3. EventService
+
+The EventService provides a simple way to publish messages to the message bus (not the system bus). It takes a map of arguments, builds the JSON event format, and publishes to the message bus. The service can be injected and used as follows.
+
+{code}
+def eventService
+
+eventService.publish(
+    eventName: "AuthorizationRequest",
+    referenceId: "/orders/${order.id}",
+    details: [
+        cardNumber: order.cardNumber,
+        cardExpiration: order.expiration,
+        amount: order.items.sum{it.price * it.quantity} 
+    ]    
+)
+{code}
+
+The @details@ argument can be a string or anything that can be rendered as JSON (like a list or map).
+
+h3. EventUtils
+
+EventUtils is a collection of static utility methods that come in handy when dealing with events and JSON.
+
+*Parsing JSON Dates*
+
+Parsing a date from JSON can be tricky because the Java date format functionality isn't fully ISO 8601 compliant. The @dateFromJson@ method makes it easy.
+
+{code}
+EventUtils.dateFromJson("2012-09-06T17:41:48Z")
+{code}
+
+This returns a valid java.util.Date object for the given GMT time in the local timezone.
+
+*Parsing ref IDs*
+
+The @parseRefId@ method parses ref IDs in the format "/orders/1/line-items/2", into a map of the components of the ID. For example:
+
+{code}
+assert EventUtils.parseRefId("/orders/1/lineItems/2") == [orders:"1", lineItems:"2"]
+{code}
+
+*Generating unique IDs*
+
+The @getUnique@ method generates a random hex encoded UUID.
+
+{code}
+EventUtils.unique
+{code}

@@ -1,0 +1,11 @@
+To install, add the appropriate dependency to BuildConfig.groovy. If not installing from a Maven repo, you can install from a zip distribution by referring to it directly.
+
+{code}
+grails install-plugin /path/to/event-driven-0.1.zip
+{code}
+
+If you have the source of the plugin locally available and want to test changes made to the plugin, add the following to BuildConfig.Groovy and reference the project dir of the plugin with either a relative or absolute path. In the case of a relative path, it is relative to the current project's home dir.
+
+{code}
+grails.plugin.location.'event-driven' = "../event-driven"
+{code}

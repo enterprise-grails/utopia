@@ -1,0 +1,3 @@
+events = {
+    'msgEvent' browser:true
+}

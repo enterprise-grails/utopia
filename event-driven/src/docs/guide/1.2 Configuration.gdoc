@@ -1,0 +1,55 @@
+Once installed there are a few configuration steps. First, add two JMS connection factories to spring/resources.groovy. One connection factory will be used for the message bus. The other will be a dedicated connection used by the logging mechanism. This must be separate from other JMS connection factories used by the app so that messages can be logged to JMS even when exceptions would cause the application's transaction context to rollback (which would rollback the logging message as well).
+
+The names of the two connection factories can be anything, and will be reference from the JMS settings in Config.groovy.
+
+{code}
+jmsRedeliveryPolicy(org.apache.activemq.RedeliveryPolicy){
+    maximumRedeliveries = 3
+    initialRedeliveryDelay = 30000L
+    redeliveryDelay = 30000L
+}
+
+jmsConnectionFactory(org.springframework.jms.connection.SingleConnectionFactory) {
+    targetConnectionFactory = { org.apache.activemq.ActiveMQConnectionFactory cf ->
+        brokerURL = 'tcp://localhost:61616'
+        redeliveryPolicy = jmsRedeliveryPolicy
+    }
+    reconnectOnException = true
+    clientId = "n23k4j5nj8j"
+}
+
+logConnectionFactory(org.springframework.jms.connection.SingleConnectionFactory) {
+    targetConnectionFactory = { org.apache.activemq.ActiveMQConnectionFactory cf ->
+        brokerURL = 'tcp://localhost:61616'
+    }
+    reconnectOnException = true
+}
+{code}
+
+Next, set up a dedicated JMS template (format defined by the JMS plugin) for the logging facility to use. This will refer to the dedicated logging connection factory set up previously.
+
+{code}
+jms {
+    templates {
+        log {
+            connectionFactoryBean = "logConnectionFactory"
+            messageConverterBean = "standardJmsMessageConverter"
+        }
+    }
+}
+{code}
+
+If desired, the names of the message and system bus topics and JMS templates can be changed by adding the config below to Config.groovy. The values shown below are the defaults, and will be used if this configuration is omitted.
+
+{code}
+eventDriven {
+    bus {
+        topic = "msgBus"
+        template = "standard"
+    }
+    log {
+        topic = "sysBus"
+        template = "log"
+    }
+}
+{code}

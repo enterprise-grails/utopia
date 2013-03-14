@@ -1,0 +1,1 @@
+The event-driven plugin is a collection of common functionality useful in building distributed event-driven applications. It contains a collection of common utilities for publishing messages to a message bus, publishing log messages to a central system bus, and dealing with message formats.
