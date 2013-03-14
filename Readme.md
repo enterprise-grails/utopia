@@ -1,7 +1,7 @@
 UTOPIA
 ======
 
-Utopia is a proof-of-concept implementation of an event-driven, service-oriented architecture build entirely on the Grails framework. It implments a very simple workflow for placing an order in a fictitious enterprise environment where each step in the order processing pipeline is implemented in different systems, exposed by web services.
+Utopia is a proof-of-concept implementation of an event-driven, service-oriented architecture built entirely on the Grails framework. It implements a very simple workflow for placing an order in a fictitious enterprise environment where each step in the order processing pipeline is implemented in different systems, exposed by web services.
 
 Prerequisites
 -------------
